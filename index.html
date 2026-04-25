@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Keur Gui Restaurant Café Pâtisserie – Dakar, Sénégal</title>
+  <meta name="description" content="Keur Gui Restaurant Café Pâtisserie à Dakar – petits-déjeuners, brunchs, cafés et pâtisseries raffinées." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Cormorant+Garamond:wght@300;400;500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── CSS Variables ─────────────────────────────────── */
+    :root {
+      --cream:    #FAF6F0;
+      --beige:    #EDE3D4;
+      --sand:     #D5C4A8;
+      --brown:    #5C3D2E;
+      --espresso: #2C1A0E;
+      --green:    #2E7D32;
+      --green-h:  #1B5E20;
+      --wa-green: #25D366;
+      --wa-dark:  #128C7E;
+      --gold:     #C49A3C;
+      --text:     #3A2A1A;
+      --muted:    #8A7060;
+      --white:    #FFFFFF;
+    }
+
+    /* ─── Reset ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    img { display: block; width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── Nav ────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 900;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 5vw;
+      height: 70px;
+      background: rgba(250,246,240,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(92,61,46,0.1);
+      transition: box-shadow .3s;
+    }
+    nav.scrolled { box-shadow: 0 4px 24px rgba(44,26,14,.1); }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--espresso);
+      line-height: 1.2;
+    }
+    .nav-logo span { display: block; font-size: .65rem; font-family: 'Jost', sans-serif; font-weight: 300; letter-spacing: .15em; color: var(--muted); text-transform: uppercase; }
+    .nav-links { display: flex; gap: 2rem; }
+    .nav-links a { font-size: .82rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--brown); transition: color .25s; }
+    .nav-links a:hover { color: var(--gold); }
+    .nav-cta {
+      background: var(--green);
+      color: var(--white);
+      padding: .45rem 1.1rem;
+      border-radius: 30px;
+      font-size: .8rem;
+      font-weight: 500;
+      letter-spacing: .05em;
+      transition: background .25s, transform .2s;
+    }
+    .nav-cta:hover { background: var(--green-h); transform: translateY(-1px); }
+    .burger { display: none; flex-direction: column; gap: 5px; cursor: pointer; padding: 4px; }
+    .burger span { width: 24px; height: 2px; background: var(--espresso); border-radius: 2px; transition: .3s; }
+    .mobile-menu {
+      display: none;
+      position: fixed; top: 70px; left: 0; right: 0; z-index: 899;
+      background: var(--cream);
+      border-bottom: 1px solid var(--beige);
+      flex-direction: column; align-items: center; gap: 0;
+      padding: 1rem 0 1.5rem;
+    }
+    .mobile-menu.open { display: flex; }
+    .mobile-menu a { padding: .75rem 2rem; font-size: .9rem; font-weight: 500; color: var(--brown); width: 100%; text-align: center; letter-spacing: .06em; text-transform: uppercase; }
+
+    /* ─── Hero ───────────────────────────────────────────── */
+    #hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(160deg, rgba(44,26,14,.55) 0%, rgba(92,61,46,.3) 60%, rgba(44,26,14,.7) 100%),
+        url('https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=1600&q=80') center/cover no-repeat;
+      transform: scale(1.04);
+      transition: transform 8s ease-out;
+    }
+    .hero-bg.loaded { transform: scale(1); }
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; padding: 2rem 1.5rem;
+      max-width: 780px;
+      animation: fadeUp .9s .2s both;
+    }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid rgba(255,255,255,.4);
+      color: rgba(255,255,255,.85);
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      padding: .4rem 1.2rem; border-radius: 30px;
+      margin-bottom: 1.6rem;
+    }
+    .hero-content h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.8rem);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.18;
+      margin-bottom: 1.2rem;
+      text-shadow: 0 2px 20px rgba(0,0,0,.3);
+    }
+    .hero-content p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1rem, 2.2vw, 1.3rem);
+      font-weight: 300;
+      color: rgba(255,255,255,.88);
+      margin-bottom: 2.4rem;
+      line-height: 1.6;
+    }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--wa-green);
+      color: var(--white);
+      padding: .95rem 2.2rem;
+      border-radius: 50px;
+      font-size: 1rem; font-weight: 500; letter-spacing: .04em;
+      box-shadow: 0 8px 30px rgba(37,211,102,.35);
+      transition: background .25s, transform .25s, box-shadow .25s;
+    }
+    .btn-wa:hover { background: var(--wa-dark); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(37,211,102,.45); }
+    .btn-wa svg { width: 22px; height: 22px; flex-shrink: 0; }
+    .hero-scroll {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      color: rgba(255,255,255,.6); font-size: .7rem; letter-spacing: .15em; text-transform: uppercase;
+      animation: bounce 2s infinite;
+    }
+    .hero-scroll svg { width: 18px; opacity: .6; }
+
+    /* ─── Section Helpers ────────────────────────────────── */
+    section { padding: 6rem 5vw; }
+    .section-label {
+      font-size: .7rem; letter-spacing: .22em; text-transform: uppercase;
+      color: var(--gold); font-weight: 500; margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700; color: var(--espresso); line-height: 1.2;
+      margin-bottom: 1.2rem;
+    }
+    .section-line {
+      width: 50px; height: 2px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      margin-bottom: 2rem;
+    }
+    .section-line.center { margin-left: auto; margin-right: auto; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s, transform .7s; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ─── About ──────────────────────────────────────────── */
+    #about { background: var(--white); }
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .about-img-wrap {
+      position: relative;
+    }
+    .about-img-wrap img {
+      border-radius: 4px;
+      height: 480px; object-fit: cover;
+      box-shadow: 0 20px 60px rgba(92,61,46,.2);
+    }
+    .about-badge {
+      position: absolute; bottom: -1.5rem; right: -1.5rem;
+      background: var(--brown);
+      color: var(--cream);
+      padding: 1.2rem 1.6rem;
+      border-radius: 4px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem; text-align: center;
+      box-shadow: 0 10px 30px rgba(92,61,46,.3);
+    }
+    .about-badge span { display: block; font-family: 'Jost', sans-serif; font-size: .7rem; letter-spacing: .1em; text-transform: uppercase; opacity: .7; margin-top: .3rem; }
+    .about-text p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; font-weight: 400; line-height: 1.8;
+      color: var(--text); margin-bottom: 1.5rem;
+    }
+    .about-tags { display: flex; flex-wrap: wrap; gap: .6rem; margin-top: 1.5rem; }
+    .tag {
+      border: 1px solid var(--sand);
+      color: var(--brown);
+      padding: .35rem .9rem; border-radius: 30px;
+      font-size: .78rem; letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    /* ─── Menu ───────────────────────────────────────────── */
+    #menu { background: var(--cream); }
+    .menu-header { text-align: center; max-width: 600px; margin: 0 auto 3.5rem; }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 2rem; max-width: 1100px; margin: 0 auto;
+    }
+    .menu-card {
+      background: var(--white);
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 4px 20px rgba(92,61,46,.08);
+      transition: transform .3s, box-shadow .3s;
+    }
+    .menu-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(92,61,46,.15); }
+    .menu-card-img {
+      height: 210px; overflow: hidden;
+    }
+    .menu-card-img img {
+      height: 100%; object-fit: cover;
+      transition: transform .5s;
+    }
+    .menu-card:hover .menu-card-img img { transform: scale(1.06); }
+    .menu-card-body { padding: 1.4rem 1.4rem 1.6rem; }
+    .menu-card-body h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 600;
+      color: var(--espresso); margin-bottom: .4rem;
+    }
+    .menu-card-body p {
+      font-size: .9rem; color: var(--muted); line-height: 1.5;
+    }
+    .menu-card-tag {
+      display: inline-block;
+      margin-top: .9rem;
+      font-size: .68rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 1px;
+    }
+
+    /* ─── Gallery ────────────────────────────────────────── */
+    #gallery { background: var(--espresso); padding: 6rem 5vw; }
+    #gallery .section-label { color: var(--gold); }
+    #gallery .section-title { color: var(--cream); }
+    .gallery-header { text-align: center; margin-bottom: 3rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 1rem;
+      max-width: 1100px; margin: 0 auto;
+    }
+    .gallery-item {
+      overflow: hidden; border-radius: 6px;
+      position: relative; cursor: pointer;
+    }
+    .gallery-item:first-child { grid-column: 1 / 3; grid-row: 1 / 2; }
+    .gallery-item:nth-child(2) { grid-column: 3 / 4; }
+    .gallery-item:nth-child(3) { grid-column: 1 / 2; }
+    .gallery-item:nth-child(4) { grid-column: 2 / 4; }
+    .gallery-item img {
+      width: 100%; height: 100%; min-height: 220px;
+      object-fit: cover;
+      transition: transform .5s;
+    }
+    .gallery-item:hover img { transform: scale(1.06); }
+    .gallery-item::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: rgba(44,26,14,0);
+      transition: background .3s;
+    }
+    .gallery-item:hover::after { background: rgba(44,26,14,.25); }
+
+    /* ─── Reservation ────────────────────────────────────── */
+    #reservation {
+      background: linear-gradient(135deg, var(--brown) 0%, var(--espresso) 100%);
+      text-align: center;
+    }
+    #reservation .section-title { color: var(--cream); }
+    #reservation .section-label { color: var(--gold); }
+    #reservation p {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem; color: rgba(250,246,240,.8);
+      max-width: 500px; margin: 0 auto 2.5rem; line-height: 1.7;
+    }
+    .btn-wa-lg {
+      display: inline-flex; align-items: center; gap: .8rem;
+      background: var(--wa-green);
+      color: var(--white);
+      padding: 1.1rem 2.8rem;
+      border-radius: 50px;
+      font-size: 1.1rem; font-weight: 500;
+      box-shadow: 0 10px 40px rgba(37,211,102,.4);
+      transition: background .25s, transform .25s;
+    }
+    .btn-wa-lg:hover { background: var(--wa-dark); transform: translateY(-3px); }
+    .btn-wa-lg svg { width: 26px; height: 26px; }
+
+    /* ─── Contact ────────────────────────────────────────── */
+    #contact { background: var(--white); }
+    .contact-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem; max-width: 1100px; margin: 0 auto; align-items: start;
+    }
+    .contact-info h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 3vw, 2.2rem);
+      color: var(--espresso); margin-bottom: 2rem;
+    }
+    .contact-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      margin-bottom: 1.8rem;
+    }
+    .contact-icon {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--beige);
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .contact-icon svg { width: 20px; height: 20px; color: var(--brown); }
+    .contact-item-text strong { display: block; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); margin-bottom: .2rem; }
+    .contact-item-text span { font-size: 1rem; color: var(--text); }
+    .contact-wa-btn {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--wa-green); color: var(--white);
+      padding: .8rem 1.8rem; border-radius: 40px;
+      font-size: .95rem; font-weight: 500; margin-top: 1rem;
+      transition: background .25s, transform .2s;
+    }
+    .contact-wa-btn:hover { background: var(--wa-dark); transform: translateY(-2px); }
+    .contact-wa-btn svg { width: 20px; height: 20px; }
+    .map-placeholder {
+      border-radius: 8px; overflow: hidden;
+      height: 360px;
+      background: var(--beige);
+      position: relative;
+      box-shadow: 0 8px 30px rgba(92,61,46,.12);
+    }
+    .map-placeholder iframe {
+      width: 100%; height: 100%; border: 0;
+    }
+    .map-label {
+      position: absolute; bottom: 1rem; left: 1rem;
+      background: var(--espresso); color: var(--cream);
+      padding: .5rem 1rem; border-radius: 30px;
+      font-size: .78rem; letter-spacing: .08em;
+    }
+
+    /* ─── Footer ─────────────────────────────────────────── */
+    footer {
+      background: var(--espresso);
+      color: rgba(250,246,240,.7);
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      color: var(--cream); margin-bottom: .4rem;
+    }
+    .footer-sub {
+      font-size: .75rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1.5rem;
+    }
+    .footer-contact { font-size: .9rem; margin-bottom: 1.5rem; }
+    .footer-contact a { color: rgba(250,246,240,.7); }
+    .footer-copy { font-size: .78rem; opacity: .5; }
+    .footer-line { width: 40px; height: 1px; background: var(--gold); opacity: .4; margin: 1.2rem auto; }
+
+    /* ─── Floating WhatsApp ──────────────────────────────── */
+    .float-wa {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 1000;
+      width: 58px; height: 58px; border-radius: 50%;
+      background: var(--wa-green);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 6px 24px rgba(37,211,102,.5);
+      transition: transform .25s, box-shadow .25s;
+      animation: pulse-wa 3s infinite;
+    }
+    .float-wa:hover { transform: scale(1.1); box-shadow: 0 10px 36px rgba(37,211,102,.6); animation: none; }
+    .float-wa svg { width: 30px; height: 30px; }
+
+    /* ─── Lightbox ───────────────────────────────────────── */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,.92);
+      align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 85vh; border-radius: 4px; object-fit: contain; }
+    .lightbox-close {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      width: 42px; height: 42px; border-radius: 50%;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: background .2s;
+      color: white; font-size: 1.3rem;
+    }
+    .lightbox-close:hover { background: rgba(255,255,255,.3); }
+
+    /* ─── Animations ─────────────────────────────────────── */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes bounce { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(8px); } }
+    @keyframes pulse-wa {
+      0%, 100% { box-shadow: 0 6px 24px rgba(37,211,102,.5); }
+      50% { box-shadow: 0 6px 40px rgba(37,211,102,.8), 0 0 0 10px rgba(37,211,102,.15); }
+    }
+
+    /* ─── Responsive ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .nav-links, .nav-cta { display: none; }
+      .burger { display: flex; }
+      .about-inner { grid-template-columns: 1fr; gap: 3rem; }
+      .about-img-wrap img { height: 320px; }
+      .about-badge { right: 1rem; bottom: -1rem; }
+      .contact-inner { grid-template-columns: 1fr; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-column: 1 / 3; }
+      .gallery-item:nth-child(2) { grid-column: 1 / 2; }
+      .gallery-item:nth-child(3) { grid-column: 2 / 3; }
+      .gallery-item:nth-child(4) { grid-column: 1 / 3; }
+    }
+    @media (max-width: 600px) {
+      section { padding: 4rem 6vw; }
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item, .gallery-item:first-child,
+      .gallery-item:nth-child(2), .gallery-item:nth-child(3),
+      .gallery-item:nth-child(4) { grid-column: auto; grid-row: auto; }
+      .float-wa { bottom: 1.2rem; right: 1.2rem; width: 52px; height: 52px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ░░ NAV ░░ -->
+<nav id="navbar">
+  <div class="nav-logo">
+    Keur Gui
+    <span>Restaurant · Café · Pâtisserie</span>
+  </div>
+  <div class="nav-links">
+    <a href="#about">À propos</a>
+    <a href="#menu">Menu</a>
+    <a href="#gallery">Galerie</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <a class="nav-cta" href="https://wa.me/221338409040?text=Bonjour%20Keur%20Gui,%20je%20souhaite%20réserver%20une%20table." target="_blank" rel="noopener">Réserver</a>
+  <div class="burger" id="burger" role="button" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about">À propos</a>
+  <a href="#menu">Menu</a>
+  <a href="#gallery">Galerie</a>
+  <a href="#reservation">Réservation</a>
+  <a href="#contact">Contact</a>
+</div>
+
+<!-- ░░ HERO ░░ -->
+<section id="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">✦ Dakar, Sénégal ✦</div>
+    <h1>Keur Gui Restaurant<br>Café Pâtisserie</h1>
+    <p>Découvrez nos délicieux petits-déjeuners, brunchs et pâtisseries à Dakar</p>
+    <a class="btn-wa" href="https://wa.me/221338409040?text=Bonjour%20Keur%20Gui,%20je%20souhaite%20réserver%20une%20table." target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Réserver sur WhatsApp
+    </a>
+  </div>
+  <div class="hero-scroll">
+    Découvrir
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+  </div>
+</section>
+
+<!-- ░░ ABOUT ░░ -->
+<section id="about">
+  <div class="about-inner">
+    <div class="about-img-wrap reveal">
+      <img src="https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=800&q=80" alt="Intérieur du café Keur Gui" loading="lazy" />
+      <div class="about-badge">
+        🌿 Qualité<br><span>Dakar, Sénégal</span>
+      </div>
+    </div>
+    <div class="about-text reveal">
+      <div class="section-label">Notre histoire</div>
+      <h2 class="section-title">À propos de nous</h2>
+      <div class="section-line"></div>
+      <p>Keur Gui Restaurant Café Pâtisserie est un lieu chaleureux situé à Dakar, proposant une variété de petits-déjeuners, brunchs, cafés et pâtisseries.</p>
+      <p>Nous mettons l'accent sur la qualité des ingrédients et un service convivial pour offrir une expérience unique à nos clients.</p>
+      <div class="about-tags">
+        <span class="tag">☕ Café</span>
+        <span class="tag">🥐 Pâtisserie</span>
+        <span class="tag">🍳 Brunch</span>
+        <span class="tag">🥞 Petit-déjeuner</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ MENU ░░ -->
+<section id="menu">
+  <div class="menu-header reveal">
+    <div class="section-label">Ce que nous servons</div>
+    <h2 class="section-title">Notre Menu</h2>
+    <div class="section-line center"></div>
+  </div>
+  <div class="menu-grid">
+
+    <div class="menu-card reveal">
+      <div class="menu-card-img">
+        <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?w=600&q=80" alt="Omelette au Fromage" loading="lazy" />
+      </div>
+      <div class="menu-card-body">
+        <h3>Omelette au Fromage</h3>
+        <p>Servie avec salade fraîche et pain croustillant pour un déjeuner savoureux.</p>
+        <span class="menu-card-tag">Petit-déjeuner</span>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <div class="menu-card-img">
+        <img src="https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?w=600&q=80" alt="Brunch Complet" loading="lazy" />
+      </div>
+      <div class="menu-card-body">
+        <h3>Brunch Complet</h3>
+        <p>Œufs, saucisses, pancakes, salade et fruits — un festin du week-end.</p>
+        <span class="menu-card-tag">Brunch</span>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <div class="menu-card-img">
+        <img src="https://images.unsplash.com/photo-1510707577719-ae7c14805e3a?w=600&q=80" alt="Expresso" loading="lazy" />
+      </div>
+      <div class="menu-card-body">
+        <h3>Expresso</h3>
+        <p>Café expresso riche et aromatique, torréfié avec soin pour les vrais amateurs.</p>
+        <span class="menu-card-tag">Boissons</span>
+      </div>
+    </div>
+
+    <div class="menu-card reveal">
+      <div class="menu-card-img">
+        <img src="https://images.unsplash.com/photo-1484723091739-30a097e8f929?w=600&q=80" alt="Petit-déjeuner Gourmand" loading="lazy" />
+      </div>
+      <div class="menu-card-body">
+        <h3>Petit-déjeuner Gourmand</h3>
+        <p>Pain, beurre, pancakes moelleux et fruits frais de saison.</p>
+        <span class="menu-card-tag">Petit-déjeuner</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ░░ GALLERY ░░ -->
+<section id="gallery">
+  <div class="gallery-header reveal">
+    <div class="section-label">Nos moments</div>
+    <h2 class="section-title" style="color:var(--cream)">Galerie</h2>
+    <div class="section-line center"></div>
+  </div>
+  <div class="gallery-grid reveal">
+    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200&q=80">
+      <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=900&q=75" alt="Ambiance restaurant" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&q=80">
+      <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=600&q=75" alt="Café et pâtisserie" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=800&q=80">
+      <img src="https://images.unsplash.com/photo-1600093463592-8e36ae95ef56?w=600&q=75" alt="Brunch servi" loading="lazy" />
+    </div>
+    <div class="gallery-item" data-src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=1200&q=80">
+      <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=900&q=75" alt="Café chaud" loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- ░░ RESERVATION ░░ -->
+<section id="reservation" class="reveal">
+  <div class="section-label">Réservation facile</div>
+  <h2 class="section-title">Réservez une Table</h2>
+  <div class="section-line center"></div>
+  <p>Réservez facilement votre table via WhatsApp en un clic. Notre équipe vous confirmera rapidement.</p>
+  <a class="btn-wa-lg" href="https://wa.me/221338409040?text=Bonjour%20Keur%20Gui,%20je%20souhaite%20réserver%20une%20table." target="_blank" rel="noopener">
+    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Réserver via WhatsApp
+  </a>
+</section>
+
+<!-- ░░ CONTACT ░░ -->
+<section id="contact">
+  <div class="contact-inner">
+    <div class="contact-info reveal">
+      <div class="section-label">Nous trouver</div>
+      <h2 class="section-title">Contactez-nous</h2>
+      <div class="section-line"></div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <strong>Téléphone</strong>
+          <span><a href="tel:+221338409040">+221 33 840 90 40</a></span>
+        </div>
+      </div>
+
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <div class="contact-item-text">
+          <strong>Adresse</strong>
+          <span>Dakar, Sénégal</span>
+        </div>
+      </div>
+
+      <a class="contact-wa-btn" href="https://wa.me/221338409040?text=Bonjour%20Keur%20Gui,%20je%20souhaite%20réserver%20une%20table." target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Écrire sur WhatsApp
+      </a>
+    </div>
+
+    <div class="map-placeholder reveal">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d123476.41388059882!2d-17.4676861!3d14.7645479!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xec172f5b3c5bb71%3A0xb17c17d92d264f06!2sDakar%2C%20S%C3%A9n%C3%A9gal!5e0!3m2!1sfr!2sfr!4v1697000000000!5m2!1sfr!2sfr"
+        allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        title="Localisation Keur Gui Dakar">
+      </iframe>
+      <div class="map-label">📍 Dakar, Sénégal</div>
+    </div>
+  </div>
+</section>
+
+<!-- ░░ FOOTER ░░ -->
+<footer>
+  <div class="footer-logo">Keur Gui</div>
+  <div class="footer-sub">Restaurant · Café · Pâtisserie</div>
+  <div class="footer-line"></div>
+  <div class="footer-contact">
+    <a href="tel:+221338409040">+221 33 840 90 40</a> &nbsp;·&nbsp; Dakar, Sénégal
+  </div>
+  <p class="footer-copy">© 2025 Keur Gui Restaurant Café Pâtisserie. Tous droits réservés.</p>
+</footer>
+
+<!-- ░░ FLOATING WA BUTTON ░░ -->
+<a class="float-wa" href="https://wa.me/221338409040?text=Bonjour%20Keur%20Gui,%20je%20souhaite%20réserver%20une%20table." target="_blank" rel="noopener" aria-label="Réserver sur WhatsApp">
+  <svg viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
+<!-- ░░ LIGHTBOX ░░ -->
+<div class="lightbox" id="lightbox" role="dialog" aria-label="Aperçu image">
+  <div class="lightbox-close" id="lbClose">✕</div>
+  <img id="lbImg" src="" alt="Aperçu" />
+</div>
+
+<!-- ░░ JS ░░ -->
+<script>
+  // ── Hero bg load
+  window.addEventListener('load', () => {
+    document.getElementById('heroBg').classList.add('loaded');
+  });
+
+  // ── Nav scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // ── Burger menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    mobileMenu.classList.toggle('open');
+  });
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => mobileMenu.classList.remove('open'));
+  });
+
+  // ── Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        entry.target.style.transitionDelay = `${i * 0.07}s`;
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => observer.observe(el));
+
+  // ── Gallery lightbox
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const src = item.dataset.src;
+      document.getElementById('lbImg').src = src;
+      document.getElementById('lightbox').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+  document.getElementById('lbClose').addEventListener('click', closeLb);
+  document.getElementById('lightbox').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeLb();
+  });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeLb(); });
+  function closeLb() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+</script>
+</body>
+</html>
